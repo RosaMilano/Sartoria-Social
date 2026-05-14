@@ -315,6 +315,14 @@
 
     <div class="block">
       <div class="block-head">
+        <span class="block-label">🎵 Mood musicale</span>
+        <button class="copy-btn" data-copy="o-musica">Copia</button>
+      </div>
+      <div class="block-body" id="o-musica"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
         <span class="block-label">📝 Caption Instagram</span>
         <button class="copy-btn" data-copy="o-captionig">Copia</button>
       </div>
@@ -441,6 +449,7 @@ Rispondi ESCLUSIVAMENTE con un oggetto JSON valido, senza testo prima o dopo, se
   "formato": "string — post singolo / carosello / reel / storia, con brevissima motivazione",
   "prompt_immagine": "string — prompt dettagliato in inglese per l'immagine AI",
   "copione_reel": "string — una scaletta pratica di 3-4 inquadrature da girare col telefono per un reel di 15-25 secondi. Per ogni inquadratura indica: cosa riprendere, durata circa in secondi, e il testo breve da sovrapporre a schermo. Linguaggio semplice, niente termini tecnici di montaggio. Deve poter essere seguito da chi non ha mai girato un video. Usa a capo reali tra le inquadrature.",
+  "mood_musicale": "string — descrizione del tipo di musica adatta al contenuto: genere, ritmo e atmosfera (NON titoli di canzoni specifiche). Aggiungi 2-3 parole chiave da cercare nella libreria audio di Instagram o CapCut. Esempio di stile: 'Strumentale acustico, ritmo lento e avvolgente, atmosfera calda da atelier. Cerca: acoustic, calm, cozy'.",
   "caption_instagram": "string — caption pronta, con a capo reali",
   "hashtag_instagram": "string — 12-18 hashtag separati da spazio",
   "post_facebook": "string — testo pronto per Facebook, con a capo reali",
@@ -566,6 +575,7 @@ function renderContent(o, c){
   document.getElementById('o-formato').textContent = o.formato || "";
   document.getElementById('o-prompt').textContent = o.prompt_immagine || "";
   document.getElementById('o-reel').textContent = o.copione_reel || "";
+  document.getElementById('o-musica').textContent = o.mood_musicale || "";
   document.getElementById('o-captionig').textContent = o.caption_instagram || "";
   document.getElementById('o-hashtag').textContent = o.hashtag_instagram || "";
   document.getElementById('o-facebook').textContent = o.post_facebook || "";
@@ -707,6 +717,9 @@ ${g('o-prompt')}
 
 🎬 COPIONE REEL
 ${g('o-reel')}
+
+🎵 MOOD MUSICALE
+${g('o-musica')}
 
 📝 CAPTION INSTAGRAM
 ${g('o-captionig')}
