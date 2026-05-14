@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sartoria · Social Studio</title>
+
+<!-- ===== PWA: rende l'app installabile sulla schermata Home ===== -->
+<meta name="theme-color" content="#9c3b2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sartoria Studio">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- Icona dell'app (rocchetto di filo, SVG inline) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%239c3b2e'/%3E%3Crect x='34' y='20' width='32' height='60' rx='4' fill='%23f5efe5'/%3E%3Crect x='28' y='18' width='44' height='8' rx='3' fill='%23b08544'/%3E%3Crect x='28' y='74' width='44' height='8' rx='3' fill='%23b08544'/%3E%3Cpath d='M38 30 L62 38 M38 40 L62 48 M38 50 L62 58 M38 60 L62 68' stroke='%239c3b2e' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%239c3b2e'/%3E%3Crect x='34' y='20' width='32' height='60' rx='4' fill='%23f5efe5'/%3E%3Crect x='28' y='18' width='44' height='8' rx='3' fill='%23b08544'/%3E%3Crect x='28' y='74' width='44' height='8' rx='3' fill='%23b08544'/%3E%3Cpath d='M38 30 L62 38 M38 40 L62 48 M38 50 L62 58 M38 60 L62 68' stroke='%239c3b2e' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<!-- Manifest incorporato: nessun file esterno necessario -->
+<script>
+(function(){
+  const manifest = {
+    name: "Sartoria · Social Studio",
+    short_name: "Sartoria Studio",
+    description: "Sistema multi-agente per i contenuti social della sartoria",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#f5efe5",
+    theme_color: "#9c3b2e",
+    orientation: "portrait",
+    icons: [{
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%239c3b2e'/%3E%3Crect x='34' y='20' width='32' height='60' rx='4' fill='%23f5efe5'/%3E%3Crect x='28' y='18' width='44' height='8' rx='3' fill='%23b08544'/%3E%3Crect x='28' y='74' width='44' height='8' rx='3' fill='%23b08544'/%3E%3Cpath d='M38 30 L62 38 M38 40 L62 48 M38 50 L62 58 M38 60 L62 68' stroke='%239c3b2e' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E",
+      sizes: "any",
+      type: "image/svg+xml",
+      purpose: "any"
+    }]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = url;
+  document.head.appendChild(link);
+})();
+</script>
+<!-- ===== fine blocco PWA ===== -->
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Archivo:wght@400;500;600&display=swap');
+
+  :root{
+    --paper:#f5efe5;
+    --ink:#2b2521;
+    --ink-soft:#5c534a;
+    --thread:#9c3b2e;
+    --thread-deep:#7d2f25;
+    --gold:#b08544;
+    --line:#ddd2bf;
+    --card:#fbf7ef;
+    --shadow:rgba(43,37,33,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Archivo',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(176,133,68,.06), transparent 40%),
+      radial-gradient(circle at 88% 82%, rgba(156,59,46,.05), transparent 42%);
+  }
+  ::selection{background:var(--thread);color:#fff}
+
+  .wrap{max-width:780px;margin:0 auto;padding:32px 22px 90px}
+
+  header{text-align:center;padding:18px 0 26px;position:relative}
+  .eyebrow{
+    font-size:11px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--thread);font-weight:600;margin-bottom:10px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(34px,7vw,52px);line-height:1.04;
+    letter-spacing:-.02em;
+  }
+  h1 em{font-style:italic;color:var(--thread)}
+  .sub{
+    margin-top:12px;color:var(--ink-soft);font-size:14.5px;
+    max-width:430px;margin-left:auto;margin-right:auto;
+  }
+  .rule{
+    width:60px;height:2px;background:var(--thread);
+    margin:20px auto 0;position:relative;
+  }
+  .rule::before,.rule::after{
+    content:"";position:absolute;top:50%;width:5px;height:5px;
+    border-radius:50%;background:var(--gold);transform:translateY(-50%);
+  }
+  .rule::before{left:-14px}.rule::after{right:-14px}
+
+  .panel{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:22px;margin-bottom:20px;
+    box-shadow:0 14px 34px -22px var(--shadow);
+  }
+  .panel-title{
+    font-family:'Fraunces',serif;font-size:13px;font-weight:600;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);
+    display:flex;align-items:center;gap:9px;margin-bottom:14px;
+  }
+  .panel-title::before{
+    content:"";width:7px;height:7px;background:var(--thread);
+    transform:rotate(45deg);flex:none;
+  }
+
+  .days{display:flex;gap:6px;flex-wrap:wrap}
+  .day{
+    flex:1;min-width:88px;text-align:center;cursor:pointer;
+    padding:10px 6px;border:1px solid var(--line);border-radius:9px;
+    background:var(--paper);transition:.18s;
+  }
+  .day:hover{border-color:var(--gold)}
+  .day.active{
+    background:var(--thread);border-color:var(--thread);color:#fff;
+    box-shadow:0 8px 18px -10px var(--thread);
+  }
+  .day .dname{font-weight:600;font-size:13px}
+  .day .dtheme{font-size:10.5px;opacity:.78;margin-top:3px;line-height:1.3}
+
+  .key-row{display:flex;gap:8px;flex-wrap:wrap}
+  input[type=password],input[type=text]{
+    flex:1;min-width:200px;font-family:'Archivo',sans-serif;font-size:14px;
+    padding:11px 13px;border:1px solid var(--line);border-radius:9px;
+    background:var(--paper);color:var(--ink);
+  }
+  input:focus{outline:none;border-color:var(--thread)}
+  .hint{font-size:12px;color:var(--ink-soft);margin-top:9px}
+  .hint a{color:var(--thread)}
+  .saved-tag{
+    font-size:12px;color:#3a7d4a;font-weight:600;
+    display:none;align-items:center;gap:5px;
+  }
+  .saved-tag.show{display:flex}
+
+  button{
+    font-family:'Archivo',sans-serif;cursor:pointer;border:none;
+    transition:.18s;font-weight:600;
+  }
+  .btn-primary{
+    width:100%;padding:17px;font-size:16px;border-radius:11px;
+    background:var(--thread);color:#fff;letter-spacing:.02em;
+    box-shadow:0 12px 26px -12px var(--thread);
+  }
+  .btn-primary:hover{background:var(--thread-deep)}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+  .btn-ghost{
+    padding:10px 14px;font-size:13px;border-radius:8px;
+    background:var(--paper);color:var(--ink);border:1px solid var(--line);
+  }
+  .btn-ghost:hover{border-color:var(--thread);color:var(--thread)}
+  .btn-save{
+    padding:11px 16px;font-size:13px;border-radius:9px;
+    background:var(--ink);color:var(--paper);
+  }
+  .btn-save:hover{background:var(--thread)}
+
+  .loader{display:none;text-align:center;padding:30px 0}
+  .loader.show{display:block}
+  .spool{
+    width:46px;height:46px;margin:0 auto 16px;border-radius:50%;
+    border:3px solid var(--line);border-top-color:var(--thread);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loader-text{font-style:italic;font-family:'Fraunces',serif;color:var(--ink-soft);font-size:15px}
+  .agent-log{margin-top:14px;font-size:12.5px;color:var(--ink-soft);min-height:20px}
+
+  #output{display:none}
+  #output.show{display:block}
+  .out-head{
+    text-align:center;font-family:'Fraunces',serif;font-style:italic;
+    font-size:22px;margin-bottom:6px;
+  }
+  .out-date{text-align:center;font-size:12px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--thread);margin-bottom:22px;font-weight:600}
+
+  .block{
+    border:1px solid var(--line);border-radius:12px;
+    margin-bottom:14px;background:var(--card);overflow:hidden;
+  }
+  .block-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:13px 16px;background:var(--paper);border-bottom:1px solid var(--line);
+  }
+  .block-label{
+    font-family:'Fraunces',serif;font-size:13px;font-weight:600;
+    letter-spacing:.08em;display:flex;align-items:center;gap:8px;
+  }
+  .block-body{padding:15px 16px;font-size:14.5px;white-space:pre-wrap;word-wrap:break-word}
+  .block-body.mono{
+    font-size:13px;color:var(--ink-soft);background:#fdfbf6;
+    font-family:'Archivo',sans-serif;
+  }
+  .copy-btn{
+    font-size:11.5px;padding:6px 12px;border-radius:7px;
+    background:var(--card);border:1px solid var(--line);color:var(--ink-soft);
+    font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  }
+  .copy-btn:hover{border-color:var(--thread);color:var(--thread)}
+  .copy-btn.done{background:#3a7d4a;color:#fff;border-color:#3a7d4a}
+
+  .img-wrap{padding:16px;text-align:center;border-bottom:1px solid var(--line)}
+  .gen-img{max-width:100%;border-radius:9px;box-shadow:0 12px 30px -16px var(--shadow)}
+  .img-placeholder{
+    padding:34px 16px;text-align:center;color:var(--ink-soft);
+    font-style:italic;font-family:'Fraunces',serif;font-size:14px;
+  }
+  .img-actions{padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+
+  .error-box{
+    display:none;background:#fbeae7;border:1px solid #e0a99f;
+    color:var(--thread-deep);padding:14px 16px;border-radius:10px;
+    font-size:13.5px;margin-bottom:16px;
+    white-space:pre-wrap;word-break:break-word;
+    max-height:320px;overflow-y:auto;
+  }
+  .error-box.show{display:block}
+
+  footer{text-align:center;margin-top:40px;font-size:11.5px;color:var(--ink-soft)}
+  footer span{color:var(--thread)}
+
+  @media(max-width:540px){
+    .day{min-width:calc(33% - 6px)}
+    .wrap{padding:20px 14px 70px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Atelier · Social Studio</div>
+    <h1>Il contenuto<br><em>del giorno</em></h1>
+    <p class="sub">Un sistema di sei agenti che crea testo, immagine e risposte pronte da pubblicare per la sartoria.</p>
+    <div class="rule"></div>
+  </header>
+
+  <div class="panel">
+    <div class="panel-title">Chiave di accesso</div>
+    <div class="key-row">
+      <input type="password" id="apiKey" placeholder="Incolla qui la tua API key Gemini (AIza...)">
+      <button class="btn-save" id="saveKey">Salva</button>
+    </div>
+    <div class="hint">
+      <span class="saved-tag" id="savedTag">● Chiave salvata in questo browser</span>
+      Si prende gratis su <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> — nessuna carta richiesta. Resta salvata solo qui, sul tuo dispositivo.
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Tema della settimana</div>
+    <div class="days" id="dayStrip"></div>
+    <div class="hint">Oggi è preselezionato in automatico. Puoi cambiare giorno se vuoi anticiparti.</div>
+  </div>
+
+  <button class="btn-primary" id="generateBtn">Crea il contenuto del giorno</button>
+
+  <div class="loader" id="loader">
+    <div class="spool"></div>
+    <div class="loader-text">Il team sta lavorando…</div>
+    <div class="agent-log" id="agentLog"></div>
+  </div>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <div id="output">
+    <div class="out-head">📅 Contenuto del giorno</div>
+    <div class="out-date" id="outDate"></div>
+
+    <div class="block">
+      <div class="block-head"><span class="block-label">🎯 Tema</span></div>
+      <div class="block-body" id="o-tema"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="block-label">📌 Formato consigliato</span></div>
+      <div class="block-body" id="o-formato"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">📸 Immagine AI</span>
+        <button class="copy-btn" data-copy="o-prompt">Copia prompt</button>
+      </div>
+      <div class="img-wrap" id="imgWrap">
+        <div class="img-placeholder" id="imgPlaceholder">L'immagine verrà generata col contenuto…</div>
+      </div>
+      <div class="img-actions" id="imgActions" style="display:none">
+        <button class="btn-ghost" id="downloadImg">⬇ Scarica immagine</button>
+        <button class="btn-ghost" id="regenImg">↻ Rigenera immagine</button>
+        <button class="btn-ghost" id="openChatgpt" style="display:none">↗ Apri ChatGPT per l'immagine</button>
+      </div>
+      <div class="block-body mono" id="o-prompt"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">🎬 Copione reel</span>
+        <button class="copy-btn" data-copy="o-reel">Copia</button>
+      </div>
+      <div class="block-body" id="o-reel"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">📝 Caption Instagram</span>
+        <button class="copy-btn" data-copy="o-captionig">Copia</button>
+      </div>
+      <div class="block-body" id="o-captionig"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">#️⃣ Hashtag Instagram</span>
+        <button class="copy-btn" data-copy="o-hashtag">Copia</button>
+      </div>
+      <div class="block-body mono" id="o-hashtag"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">📘 Post Facebook</span>
+        <button class="copy-btn" data-copy="o-facebook">Copia</button>
+      </div>
+      <div class="block-body" id="o-facebook"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">📲 Storia Instagram/Facebook</span>
+        <button class="copy-btn" data-copy="o-storia">Copia</button>
+      </div>
+      <div class="block-body" id="o-storia"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">💬 Risposta ai commenti</span>
+        <button class="copy-btn" data-copy="o-commenti">Copia</button>
+      </div>
+      <div class="block-body" id="o-commenti"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <span class="block-label">📩 Risposta ai messaggi privati</span>
+        <button class="copy-btn" data-copy="o-privati">Copia</button>
+      </div>
+      <div class="block-body" id="o-privati"></div>
+    </div>
+
+    <button class="btn-primary" id="copyAll" style="margin-top:6px">Copia tutto il pacchetto</button>
+  </div>
+
+  <footer>Cucito con cura · sistema multi-agente <span>Social Studio</span> · motore Gemini</footer>
+</div>
+
+<script>
+const CALENDAR = [
+  {day:"Domenica", theme:"Cura dei capi e sostenibilità", brief:"un consiglio pratico su come conservare, lavare o far durare di più un capo; il valore di riparare invece di buttare."},
+  {day:"Lunedì",   theme:"Consiglio di stile",            brief:"un consiglio di stile semplice e applicabile nella vita quotidiana, elegante ma realistico."},
+  {day:"Martedì",  theme:"Piccola riparazione sartoriale", brief:"raccontare una piccola riparazione (orlo, cerniera, bottone, scucitura) e perché vale la pena farla bene."},
+  {day:"Mercoledì",theme:"Trend moda quotidiano",         brief:"un trend moda attuale ma adattato e reso indossabile nella vita di tutti i giorni."},
+  {day:"Giovedì",  theme:"Prima / dopo di un capo",       brief:"il valore di un capo sistemato: la trasformazione tra prima e dopo un intervento sartoriale."},
+  {day:"Venerdì",  theme:"Outfit elegante o cerimonia",   brief:"un consiglio per un outfit elegante o da cerimonia, su come un capo su misura o sistemato fa la differenza."},
+  {day:"Sabato",   theme:"Artigianato e tradizione",      brief:"il valore del fatto a mano, della tradizione sartoriale, del tempo e della cura dietro ogni capo."}
+];
+
+let selectedDay = new Date().getDay();
+let lastImagePrompt = "";
+let lastImageData = "";
+
+const TEXT_MODEL  = "gemini-2.5-flash";
+const IMAGE_MODEL = "gemini-2.5-flash-image-preview";
+const API_BASE = "https://generativelanguage.googleapis.com/v1beta/models/";
+
+const strip = document.getElementById('dayStrip');
+CALENDAR.forEach((c,i)=>{
+  const el = document.createElement('div');
+  el.className = 'day' + (i===selectedDay?' active':'');
+  el.innerHTML = `<div class="dname">${c.day}</div><div class="dtheme">${c.theme}</div>`;
+  el.onclick = ()=>{
+    selectedDay = i;
+    document.querySelectorAll('.day').forEach(d=>d.classList.remove('active'));
+    el.classList.add('active');
+  };
+  strip.appendChild(el);
+});
+
+const keyInput = document.getElementById('apiKey');
+const savedTag = document.getElementById('savedTag');
+const storedKey = localStorage.getItem('sartoria_gemini_key');
+if(storedKey){ keyInput.value = storedKey; savedTag.classList.add('show'); }
+
+document.getElementById('saveKey').onclick = ()=>{
+  const k = keyInput.value.trim();
+  if(!k){ alert('Incolla prima la chiave.'); return; }
+  localStorage.setItem('sartoria_gemini_key', k);
+  savedTag.classList.add('show');
+};
+
+function buildSystemPrompt(){
+  return `Sei un team multi-agente che gestisce i contenuti social di una SARTORIA ARTIGIANALE su Facebook e Instagram. Lavori in lingua ITALIANA.
+
+IL TEAM (ogni agente contribuisce, ma restituisci solo il risultato finale gia rivisto):
+1. SOCIAL STRATEGIST — sceglie formato e obiettivo del contenuto in base al tema del giorno.
+2. ESPERTO MODA E SARTORIA — crea il consiglio tecnico/stilistico, utile e realistico.
+3. COPYWRITER SOCIAL — scrive i testi pronti per Instagram e Facebook.
+4. VISUAL DESIGNER AI — scrive un prompt dettagliato in INGLESE per generare l'immagine.
+5. ENGAGEMENT MANAGER — aggiunge CTA, domanda finale, hashtag, idea storia, risposte pronte.
+6. REVISORE FINALE — controlla che tutto sia coerente, naturale, elegante, pronto da pubblicare.
+
+BRAND:
+- Attivita: sartoria artigianale.
+- Servizi: riparazioni, modifiche abiti, orli, cerniere, restringimenti, allargamenti, abiti su misura, sistemazione capi eleganti, consigli di stile, cura dei tessuti.
+- Tono: elegante, umano, professionale, semplice, rassicurante. Come una sartoria reale, non un brand impersonale.
+- Obiettivo: aumentare fiducia, richieste in privato, prenotazioni, interesse verso la sartoria.
+
+REGOLE FERREE:
+- NON inventare prezzi, sconti, promozioni, nomi propri, indirizzi o numeri.
+- NON usare frasi artificiali o gergo da marketing aggressivo.
+- Se mancano dati specifici, crea contenuto evergreen.
+- Il prompt immagine deve essere in inglese, fotografico e realistico, SENZA testo nell'immagine.
+- Tutto deve essere pronto da copiare e incollare.
+
+Rispondi ESCLUSIVAMENTE con un oggetto JSON valido, senza testo prima o dopo, senza backtick markdown. Struttura esatta:
+{
+  "tema": "string — il tema scelto, una riga",
+  "formato": "string — post singolo / carosello / reel / storia, con brevissima motivazione",
+  "prompt_immagine": "string — prompt dettagliato in inglese per l'immagine AI",
+  "copione_reel": "string — una scaletta pratica di 3-4 inquadrature da girare col telefono per un reel di 15-25 secondi. Per ogni inquadratura indica: cosa riprendere, durata circa in secondi, e il testo breve da sovrapporre a schermo. Linguaggio semplice, niente termini tecnici di montaggio. Deve poter essere seguito da chi non ha mai girato un video. Usa a capo reali tra le inquadrature.",
+  "caption_instagram": "string — caption pronta, con a capo reali",
+  "hashtag_instagram": "string — 12-18 hashtag separati da spazio",
+  "post_facebook": "string — testo pronto per Facebook, con a capo reali",
+  "storia": "string — testo breve per la storia + idea visual, su due righe",
+  "risposta_commenti": "string — risposta pronta e cordiale per i commenti",
+  "risposta_privati": "string — risposta pronta per chi chiede informazioni in privato"
+}`;
+}
+
+const loader = document.getElementById('loader');
+const agentLog = document.getElementById('agentLog');
+const output = document.getElementById('output');
+const errorBox = document.getElementById('errorBox');
+const genBtn = document.getElementById('generateBtn');
+
+const AGENT_STEPS = [
+  "Social Strategist · sceglie formato e obiettivo…",
+  "Esperto Moda · prepara il consiglio sartoriale…",
+  "Copywriter · scrive i testi per IG e FB…",
+  "Visual Designer · costruisce il prompt immagine…",
+  "Engagement Manager · CTA, hashtag e risposte…",
+  "Revisore Finale · controllo eleganza e coerenza…"
+];
+
+function showError(msg){
+  errorBox.textContent = msg;
+  errorBox.classList.add('show');
+  loader.classList.remove('show');
+  genBtn.disabled = false;
+}
+
+async function generate(){
+  const key = localStorage.getItem('sartoria_gemini_key') || keyInput.value.trim();
+  if(!key){ showError('Inserisci e salva prima la tua API key Gemini.'); return; }
+
+  errorBox.classList.remove('show');
+  output.classList.remove('show');
+  loader.classList.add('show');
+  genBtn.disabled = true;
+
+  let step = 0;
+  agentLog.textContent = AGENT_STEPS[0];
+  const logTimer = setInterval(()=>{
+    step = (step+1) % AGENT_STEPS.length;
+    agentLog.textContent = AGENT_STEPS[step];
+  }, 1600);
+
+  const c = CALENDAR[selectedDay];
+  const userMsg = `Tema del giorno: ${c.day} — "${c.theme}".
+Indicazione per il team: ${c.brief}
+Crea il contenuto completo del giorno seguendo la struttura JSON richiesta.`;
+
+  try{
+    const res = await fetch(API_BASE + TEXT_MODEL + ":generateContent",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "x-goog-api-key":key
+      },
+      body:JSON.stringify({
+        system_instruction:{ parts:[{ text:buildSystemPrompt() }] },
+        contents:[{ role:"user", parts:[{ text:userMsg }] }],
+        generationConfig:{
+          temperature:0.85,
+          maxOutputTokens:4096,
+          responseMimeType:"application/json"
+        }
+      })
+    });
+
+    if(!res.ok){
+      const t = await res.text();
+      let msg = `Errore API (${res.status}).`;
+      if(res.status===429) msg += " Limite giornaliero gratuito raggiunto — riprova domani.";
+      else if(res.status===403||res.status===400) msg += " Chiave non valida o non attiva. Controlla la API key.";
+      else msg += " " + t.slice(0,160);
+      throw new Error(msg);
+    }
+    const data = await res.json();
+    let text = "";
+    let finishReason = "";
+    if(data.candidates && data.candidates[0]){
+      finishReason = data.candidates[0].finishReason || "";
+      if(data.candidates[0].content){
+        text = (data.candidates[0].content.parts||[]).map(p=>p.text||"").join("\n").trim();
+      }
+    }
+    // salvo la risposta grezza per diagnostica
+    window.__lastRaw = JSON.stringify(data).slice(0,1500);
+
+    if(!text){
+      if(finishReason==="SAFETY") throw new Error("Il contenuto è stato bloccato dai filtri di sicurezza. Riprova.");
+      if(finishReason==="MAX_TOKENS") throw new Error("Risposta troppo lunga e troncata. Premi di nuovo il pulsante.");
+      throw new Error("Risposta vuota. Dettaglio tecnico: " + window.__lastRaw);
+    }
+    text = text.replace(/```json/gi,"").replace(/```/g,"").trim();
+
+    let obj;
+    try{ obj = JSON.parse(text); }
+    catch(e){
+      const m = text.match(/\{[\s\S]*\}/);
+      if(m){
+        try{ obj = JSON.parse(m[0]); }
+        catch(e2){ throw new Error("Risposta incompleta. Risposta ricevuta: " + text.slice(0,400)); }
+      } else {
+        throw new Error("Risposta non JSON. Risposta ricevuta: " + text.slice(0,400));
+      }
+    }
+
+    clearInterval(logTimer);
+    renderContent(obj, c);
+    await generateImage(obj.prompt_immagine, key);
+
+  }catch(err){
+    clearInterval(logTimer);
+    showError("Qualcosa non ha funzionato: " + err.message);
+  }
+}
+
+function renderContent(o, c){
+  document.getElementById('outDate').textContent = c.day + " · " + c.theme;
+  document.getElementById('o-tema').textContent = o.tema || c.theme;
+  document.getElementById('o-formato').textContent = o.formato || "";
+  document.getElementById('o-prompt').textContent = o.prompt_immagine || "";
+  document.getElementById('o-reel').textContent = o.copione_reel || "";
+  document.getElementById('o-captionig').textContent = o.caption_instagram || "";
+  document.getElementById('o-hashtag').textContent = o.hashtag_instagram || "";
+  document.getElementById('o-facebook').textContent = o.post_facebook || "";
+  document.getElementById('o-storia').textContent = o.storia || "";
+  document.getElementById('o-commenti').textContent = o.risposta_commenti || "";
+  document.getElementById('o-privati').textContent = o.risposta_privati || "";
+  lastImagePrompt = o.prompt_immagine || "";
+
+  loader.classList.remove('show');
+  output.classList.add('show');
+  genBtn.disabled = false;
+  output.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+async function generateImage(prompt, key){
+  const wrap = document.getElementById('imgWrap');
+  const ph = document.getElementById('imgPlaceholder');
+  const actions = document.getElementById('imgActions');
+  if(!prompt){ if(ph) ph.textContent = "Nessun prompt immagine disponibile."; return; }
+
+  wrap.innerHTML = '<div class="img-placeholder" id="imgPlaceholder">Generazione immagine in corso…</div>';
+  actions.style.display = "none";
+
+  try{
+    const res = await fetch(API_BASE + IMAGE_MODEL + ":generateContent",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "x-goog-api-key":key
+      },
+      body:JSON.stringify({
+        contents:[{ role:"user", parts:[{ text:
+          "Create a photorealistic image. " + prompt }] }]
+      })
+    });
+
+    if(!res.ok) throw new Error("status "+res.status);
+    const data = await res.json();
+
+    let b64 = "";
+    if(data.candidates && data.candidates[0] && data.candidates[0].content){
+      for(const part of (data.candidates[0].content.parts||[])){
+        if(part.inlineData && part.inlineData.data){ b64 = part.inlineData.data; }
+        if(part.inline_data && part.inline_data.data){ b64 = part.inline_data.data; }
+      }
+    }
+    if(!b64) throw new Error("nessuna immagine restituita");
+
+    lastImageData = b64;
+    wrap.innerHTML = '<img class="gen-img" src="data:image/png;base64,'+b64+'" alt="Immagine generata">';
+    actions.style.display = "flex";
+    document.getElementById('downloadImg').style.display = "inline-block";
+    document.getElementById('regenImg').style.display = "inline-block";
+    document.getElementById('openChatgpt').style.display = "none";
+
+  }catch(err){
+    wrap.innerHTML = '<div class="img-placeholder">Genera l\'immagine con il prompt qui sotto.<br>Tocca il pulsante per aprire ChatGPT, poi incolla il prompt (lo trovi gi&agrave; copiato se hai usato "Copia prompt").</div>';
+    actions.style.display = "flex";
+    document.getElementById('downloadImg').style.display = "none";
+    document.getElementById('regenImg').style.display = "none";
+    document.getElementById('openChatgpt').style.display = "inline-block";
+  }
+}
+
+document.getElementById('downloadImg').onclick = ()=>{
+  if(!lastImageData) return;
+  const a = document.createElement('a');
+  a.href = "data:image/png;base64,"+lastImageData;
+  a.download = "sartoria-contenuto.png";
+  a.click();
+};
+document.getElementById('regenImg').onclick = ()=>{
+  const key = localStorage.getItem('sartoria_gemini_key') || keyInput.value.trim();
+  if(key && lastImagePrompt) generateImage(lastImagePrompt, key);
+};
+/* ============ COPIA ROBUSTA (con fallback per file:// ) ============ */
+function copyText(txt){
+  return new Promise((resolve)=>{
+    // metodo moderno
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(()=>resolve(true)).catch(()=>{
+        resolve(fallbackCopy(txt));
+      });
+    } else {
+      resolve(fallbackCopy(txt));
+    }
+  });
+}
+function fallbackCopy(txt){
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.left = '0';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, txt.length);
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  }catch(e){ return false; }
+}
+
+document.getElementById('openChatgpt').onclick = ()=>{
+  if(lastImagePrompt){
+    copyText("Genera un'immagine fotorealistica: " + lastImagePrompt);
+  }
+  window.open("https://chatgpt.com/", "_blank");
+};
+
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    const txt = document.getElementById(btn.dataset.copy).textContent;
+    copyText(txt).then(ok=>{
+      const old = btn.textContent;
+      btn.textContent = ok ? "✓ Copiato" : "✗ Riprova";
+      btn.classList.add('done');
+      setTimeout(()=>{ btn.textContent = old; btn.classList.remove('done'); },1600);
+    });
+  };
+});
+
+document.getElementById('copyAll').onclick = ()=>{
+  const g = id=>document.getElementById(id).textContent;
+  const pkg =
+`📅 CONTENUTO DEL GIORNO — ${document.getElementById('outDate').textContent}
+
+🎯 TEMA
+${g('o-tema')}
+
+📌 FORMATO CONSIGLIATO
+${g('o-formato')}
+
+📸 PROMPT IMMAGINE AI
+${g('o-prompt')}
+
+🎬 COPIONE REEL
+${g('o-reel')}
+
+📝 CAPTION INSTAGRAM
+${g('o-captionig')}
+
+#️⃣ HASHTAG INSTAGRAM
+${g('o-hashtag')}
+
+📘 POST FACEBOOK
+${g('o-facebook')}
+
+📲 STORIA INSTAGRAM/FACEBOOK
+${g('o-storia')}
+
+💬 RISPOSTA PRONTA AI COMMENTI
+${g('o-commenti')}
+
+📩 RISPOSTA PRONTA AI MESSAGGI PRIVATI
+${g('o-privati')}
+
+✅ CONTROLLO FINALE
+Confermato: contenuto pronto per la pubblicazione.`;
+  copyText(pkg).then(ok=>{
+    const b = document.getElementById('copyAll');
+    const old = b.textContent;
+    b.textContent = ok ? "✓ Pacchetto copiato" : "✗ Riprova";
+    setTimeout(()=>{ b.textContent = old; },1800);
+  });
+};
+
+genBtn.onclick = generate;
+
+/* ===== Registrazione service worker (solo su https, es. GitHub Pages) =====
+   Se l'app è aperta come file locale, questo blocco non fa nulla. */
+if('serviceWorker' in navigator && location.protocol === 'https:'){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{
+      /* nessun problema: l'app funziona comunque, solo senza modalità offline */
+    });
+  });
+}
+</script>
+</body>
+</html>
